@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-//@Import()
+@Import(be.zwaldeck.repository.rmdbs.config.RMDBSConfig.class)
 @Profile("RMDBS")
 public class RMDBSConfig {
 }

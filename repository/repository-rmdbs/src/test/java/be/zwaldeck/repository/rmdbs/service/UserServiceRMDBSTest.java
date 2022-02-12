@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
@@ -34,16 +35,28 @@ class UserServiceRMDBSTest {
 
     @Test
     void loadUserByUsername_success() {
+        when(userDAO.findByUsername(anyString())).thenReturn(Optional.of(getUserDB()));
 
+        assertNotNull(userService.loadUserByUsername("user"));
     }
 
     @Test
     void loadUserByUsername_fail() {
+        when(userDAO.findByUsername(anyString())).thenReturn(Optional.empty());
 
+        Throwable t = assertThrows(UsernameNotFoundException.class,
+                () -> userService.loadUserByUsername("user"));
+        assertEquals("No user found with username 'user'", t.getMessage());
     }
 
     @Test
     void getUserByUserName_success() {
+        when(userDAO.findByUsername(anyString())).thenReturn(Optional.of(getUserDB()));
+        assertTrue(userService.getUserByUserName("user").isPresent());
+    }
+
+    @Test
+    void getUserByUserName_fail() {
         when(userDAO.findByUsername(anyString())).thenReturn(Optional.of(getUserDB()));
         assertTrue(userService.getUserByUserName("user").isPresent());
     }
