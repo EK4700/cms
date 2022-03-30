@@ -30,4 +30,9 @@ public class UserServiceRMDBS implements UserService {
     public Optional<User> getUserByUserName(String username) {
         return userDAO.findByUsername(username).map(converter::fromDB);
     }
+
+    @Override
+    public User create(User admin) {
+        return converter.fromDB(userDAO.saveAndFlush(converter.toDB(admin, false)));
+    }
 }

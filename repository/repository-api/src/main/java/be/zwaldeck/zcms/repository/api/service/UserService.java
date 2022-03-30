@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
     Optional<User> getUserByUserName(String username);
+
+    User create(User admin);
 }

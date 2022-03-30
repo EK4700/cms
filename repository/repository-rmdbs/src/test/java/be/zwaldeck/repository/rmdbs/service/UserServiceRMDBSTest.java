@@ -3,6 +3,7 @@ package be.zwaldeck.repository.rmdbs.service;
 import be.zwaldeck.repository.rmdbs.converter.UserConverterRMDBS;
 import be.zwaldeck.repository.rmdbs.dao.UserDAO;
 import be.zwaldeck.repository.rmdbs.domain.UserDB;
+import be.zwaldeck.zcms.repository.api.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -65,5 +67,16 @@ class UserServiceRMDBSTest {
         UserDB db = new UserDB();
         db.setUserName("name");
         return db;
+    }
+
+    @Test
+    void create_success() {
+        when(userDAO.saveAndFlush(any(UserDB.class))).thenReturn(getUserDB());
+
+        User user = new User();
+        User result = userService.create(user);
+
+        assertNotNull(result);
+        assertEquals("name", result.getUsername());
     }
 }
